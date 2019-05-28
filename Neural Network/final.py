@@ -6,11 +6,6 @@ import numpy as np
 
 iris = pd.read_csv('ShufIris.csv')
 
-#Create numeric classes for species (0,1,2) 
-iris.loc[iris['Species']=='virginica','Species']=0
-iris.loc[iris['Species']=='versicolor','Species']=1
-iris.loc[iris['Species']=='setosa','Species'] =2
-#iris = iris[iris['Species']!=2]
 
 #Create Input and Output columns
 X = iris[['SepalLengthCm','SepalWidthCm','PetalWidthCm', 'PetalLengthCm']].values.T
@@ -22,11 +17,11 @@ Y = iris[['Species']].values.T
 def sigmoid(z):
     return 1/(1 + np.exp(-z))
 
-def initialize_parameters(n_x, n_h, n_y):
-    W1 = np.random.randn(n_h, n_x)
-    b1 = np.zeros((n_h, 1))
-    W2 = np.random.randn(n_y, n_h)
-    b2 = np.zeros((n_y, 1))
+def initialize_parameters(num_input, num_hidde, num_output):
+    W1 = np.random.randn(num_hidde, num_input)
+    b1 = np.zeros((num_hidde, 1))
+    W2 = np.random.randn(num_output, num_hidde)
+    b2 = np.zeros((num_output, 1))
 
     parameters = {
         "W1": W1,
@@ -107,8 +102,8 @@ def update_parameters(parameters, grads, learning_rate):
     return new_parameters
 
 
-def model(X, Y, n_x, n_h, n_y, num_of_iters, learning_rate):
-    parameters = initialize_parameters(n_x, n_h, n_y)
+def model(X, Y, num_input, num_hidde, num_output, num_of_iters, learning_rate):
+    parameters = initialize_parameters(num_input, num_hidde, num_output)
 
     for i in range(0, num_of_iters+1):
         a2, cache = forward_prop(X, parameters)
@@ -119,7 +114,7 @@ def model(X, Y, n_x, n_h, n_y, num_of_iters, learning_rate):
 
         parameters = update_parameters(parameters, grads, learning_rate)
 
-        if(i%1000 == 0):
+        if(i%100 == 0):
             print('Cost after iteration# {:d}: {:f}'.format(i, cost))
 
     return parameters
@@ -128,7 +123,6 @@ def predict(X, parameters):
     a2, cache = forward_prop(X, parameters)
     yhat = a2
     yhat = np.squeeze(yhat)
-    print(yhat)
     for i in yhat:
         if(i >= 0.5):
             y_predict = 1
@@ -141,18 +135,21 @@ def predict(X, parameters):
 # No. of training examples
 m = X.shape[1]
 
-# Set the hyperparameters
-n_x = 4     #No. of neurons in first layer
-n_h = 2     #No. of neurons in hidden layer
-n_y = 3     #No. of neurons in output layer
-num_of_iters = 10000
-learning_rate = 0.4
 
-trained_parameters = model(X, Y, n_x, n_h, n_y, num_of_iters, learning_rate)
+# Set the hyperparameters
+num_input = 4     #No. of neurons in first layer
+num_hidde = int(input("Number of nuerons: "))    #No. of neurons in hidden layer
+num_output = 3     #No. of neurons in output layer
+num_of_iters = 10000
+learning_rate = float(input("Learning parameter: "))
+
+trained_parameters = model(X, Y, num_input, num_hidde, num_output, num_of_iters, learning_rate)
 
 # Test 2X1 vector to calculate the XOR of its elements. 
 # Try (0, 0), (0, 1), (1, 0), (1, 1)
-X_test = np.array([[0],[0],[1], [1]])
+X_test = np.array([[5],[3],[1],[0]]
+                )
+
 
 y_predict = predict(X_test, trained_parameters)
 

@@ -94,8 +94,8 @@ print(y_test)
 def sigmoid(z):
     return 1/(1 + np.exp(-z))
 
-def initialize_parameters(n_x, n_h, n_y):
-    W1 = np.random.randn(n_h, n_x)
+def initialize_parameters(num_input, n_h, n_y):
+    W1 = np.random.randn(n_h, num_input)
     b1 = np.zeros((n_h, 1))
     W2 = np.random.randn(n_y, n_h)
     b2 = np.zeros((n_y, 1))
@@ -179,8 +179,8 @@ def update_parameters(parameters, grads, learning_rate):
     return new_parameters
 
 
-def model(X, Y, n_x, n_h, n_y, num_of_iters, learning_rate):
-    parameters = initialize_parameters(n_x, n_h, n_y)
+def model(X, Y, num_input, n_h, n_y, num_of_iters, learning_rate):
+    parameters = initialize_parameters(num_input, n_h, n_y)
 
     for i in range(0, num_of_iters+1):
         a2, cache = forward_prop(X, parameters)
@@ -215,13 +215,13 @@ def predict(X, parameters):
 m = X.shape[1]
 
 # Set the hyperparameters
-n_x = 4     #No. of neurons in first layer
+num_input = 4     #No. of neurons in first layer
 n_h = 2     #No. of neurons in hidden layer
 n_y = 3     #No. of neurons in output layer
 num_of_iters = 10000
 learning_rate = 0.4
 
-trained_parameters = model(X, y, n_x, n_h, n_y, num_of_iters, learning_rate)
+trained_parameters = model(X, y, num_input, n_h, n_y, num_of_iters, learning_rate)
 
 # Test 2X1 vector to calculate the XOR of its elements. 
 # Try (0, 0), (0, 1), (1, 0), (1, 1)
