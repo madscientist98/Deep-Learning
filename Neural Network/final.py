@@ -8,16 +8,48 @@ iris = pd.read_csv('Iris.csv')
 
 #Create numeric classes for species (0,1,2) 
 iris.loc[iris['Species']=='virginica','Species']=0
-iris.loc[iris['Species']=='versicolor','Species']=2
-iris.loc[iris['Species']=='setosa','Species'] = 1
-iris = iris[iris['Species']!=2]
+iris.loc[iris['Species']=='versicolor','Species']=1
+iris.loc[iris['Species']=='setosa','Species'] =2
+#iris = iris[iris['Species']!=2]
 
 #Create Input and Output columns
-X = iris[['PetalWidthCm', 'PetalLengthCm']].values.T
+X = iris[['SepalLengthCm','SepalWidthCm','PetalWidthCm', 'PetalLengthCm']].values.T
 Y = iris[['Species']].values.T
 
-#print(X)
+
+x=iris.iloc[:,1:5].values
+y=iris.iloc[:,5].values
+
+print(x)
+print("asdasd")
+print(y)
+
+total_length=len(iris)
+train_length=int(0.8*total_length)
+test_length=int(0.2*total_length)
+
+X_train = X[:train_length]
+Y_train = Y[train_length:]
+
+X_test = X[train_length:]
+Y_test = Y[:train_length]
+
+
+
+print(X)
+print("aaa")
 print(Y)
+
+print("tamaño")
+print(total_length)
+print("x_train")
+print(X_train)
+print("Y_train")
+print(Y_train)
+print("X_test")
+print(X_test)
+print("Y_test")
+print(Y_test)
 
 def sigmoid(z):
     return 1/(1 + np.exp(-z))
@@ -128,7 +160,10 @@ def predict(X, parameters):
     a2, cache = forward_prop(X, parameters)
     yhat = a2
     yhat = np.squeeze(yhat)
+    print(yhat)
     if(yhat >= 0.5):
+        y_predict = 1
+    if(yhat >= 1.5):
         y_predict = 1
     else:
         y_predict = 0
@@ -136,22 +171,13 @@ def predict(X, parameters):
     return y_predict
     
 
-
-np.random.seed(2)
-"""
-# The 4 training examples by columns
-X = np.array([[0, 0, 1, 1], [0, 1, 0, 1]])
-
-# The outputs of the XOR for every example in X
-Y = np.array([[0, 1, 1, 0]])
-"""
 # No. of training examples
 m = X.shape[1]
 
 # Set the hyperparameters
-n_x = 2     #No. of neurons in first layer
+n_x = 4     #No. of neurons in first layer
 n_h = 2     #No. of neurons in hidden layer
-n_y = 1     #No. of neurons in output layer
+n_y = 3     #No. of neurons in output layer
 num_of_iters = 10000
 learning_rate = 0.4
 
@@ -159,7 +185,7 @@ trained_parameters = model(X, Y, n_x, n_h, n_y, num_of_iters, learning_rate)
 
 # Test 2X1 vector to calculate the XOR of its elements. 
 # Try (0, 0), (0, 1), (1, 0), (1, 1)
-X_test = np.array([[1], [1]])
+X_test = np.array([[0],[0],[1], [1]])
 
 y_predict = predict(X_test, trained_parameters)
 
