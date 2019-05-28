@@ -7,16 +7,17 @@ import numpy as np
 iris = pd.read_csv('Iris.csv')
 
 #Create numeric classes for species (0,1,2) 
-iris.loc[iris['Species']=='virginica','species']=0
-iris.loc[iris['Species']=='versicolor','species']=1
-iris.loc[iris['Species']=='setosa','species'] = 2
-iris = iris[iris['species']!=2]
+iris.loc[iris['Species']=='virginica','Species']=0
+iris.loc[iris['Species']=='versicolor','Species']=2
+iris.loc[iris['Species']=='setosa','Species'] = 1
+iris = iris[iris['Species']!=2]
 
 #Create Input and Output columns
 X = iris[['PetalWidthCm', 'PetalLengthCm']].values.T
-Y = iris[['species']].values.T
+Y = iris[['Species']].values.T
 
-print(X)
+#print(X)
+print(Y)
 
 def sigmoid(z):
     return 1/(1 + np.exp(-z))
