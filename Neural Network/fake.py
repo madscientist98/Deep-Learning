@@ -4,7 +4,13 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
-iris = pd.read_csv('ShufIris.csv')
+import pandas as pd #loading data in table form  
+import matplotlib.pyplot as plt #visualisation
+import numpy as np # linear algebra
+import pandas as pd # data processing, CSV file I/O (e.g. pd.read_csv)
+from sklearn.preprocessing import normalize 
+
+iris = pd.read_csv('Iris.csv')
 
 #Create numeric classes for species (0,1,2) 
 iris.loc[iris['Species']=='virginica','Species']=0
@@ -13,12 +19,78 @@ iris.loc[iris['Species']=='setosa','Species'] =2
 #iris = iris[iris['Species']!=2]
 
 #Create Input and Output columns
-X = iris[['SepalLengthCm','SepalWidthCm','PetalWidthCm', 'PetalLengthCm']].values.T
-Y = iris[['Species']].values.T
+X = iris[['SepalLengthCm','SepalWidthCm','PetalWidthCm', 'PetalLengthCm']].values
+Y = iris[['Species']].values
+
+
+x=iris.iloc[:,1:5].values.T
+y=iris.iloc[:,5].values.T
+
+print(x)
+print("asdasd")
+print(y)
+
+total_length=len(iris)
+train_length=int(0.95*total_length)
+test_length=int(0.05*total_length)
+
+X_train = X[:train_length]
+Y_train = Y[train_length:]
+
+X_test = X[:train_length]
+Y_test = Y[train_length:]
 
 
 
+print(X)
+print("aaa")
+print(Y)
 
+print("tamaño")
+print(total_length)
+print("x_train")
+print(X_train)
+print("Y_train")
+print(Y_train)
+print("X_test")
+print(X_test)
+print("Y_test")
+print(Y_test)
+
+"""
+data=pd.read_csv("Iris.csv")
+data.loc[data["Species"]=="Iris-setosa","Species"]=0
+data.loc[data["Species"]=="Iris-versicolor","Species"]=1
+data.loc[data["Species"]=="Iris-virginica","Species"]=2
+
+X=data.iloc[:,1:5].values.T
+y=data.iloc[:,5].values
+
+X_normalized=normalize(X,axis=0)
+print("Examples of X_normalised\n",X_normalized[:3])
+
+total_length=len(data)
+train_length=int(0.8*total_length)
+test_length=int(0.2*total_length)
+
+X_train=X_normalized[:train_length]
+X_test=X_normalized[train_length:]
+y_train=y[:train_length]
+y_test=y[train_length:]
+
+
+print("Length of train set x:",X_train.shape[0],"y:",y_train.shape[0])
+print("Length of test set x:",X_test.shape[0],"y:",y_test.shape[0])
+
+print("X_trin")
+print(X_train)
+print("X_test.")
+print(X_test)
+print("Y_train")
+print(y_train)
+print("Y_test")
+print(y_test)
+"""
 def sigmoid(z):
     return 1/(1 + np.exp(-z))
 
@@ -41,7 +113,7 @@ def forward_prop(X, parameters):
     b1 = parameters["b1"]
     W2 = parameters["W2"]
     b2 = parameters["b2"]
-
+    #print(W1)
     Z1 = np.dot(W1, X) + b1
     A1 = np.tanh(Z1)
     Z2 = np.dot(W2, A1) + b2
@@ -129,11 +201,12 @@ def predict(X, parameters):
     yhat = a2
     yhat = np.squeeze(yhat)
     print(yhat)
-    for i in yhat:
-        if(i >= 0.5):
-            y_predict = 1
-        else:
-            y_predict = 0
+    if(yhat[i] >= 0.5):
+        y_predict = 1
+    if(yhat >= 1.5):
+        y_predict = 1
+    else:
+        y_predict = 0
 
     return y_predict
     
@@ -148,13 +221,22 @@ n_y = 3     #No. of neurons in output layer
 num_of_iters = 10000
 learning_rate = 0.4
 
-trained_parameters = model(X, Y, n_x, n_h, n_y, num_of_iters, learning_rate)
+trained_parameters = model(X, y, n_x, n_h, n_y, num_of_iters, learning_rate)
 
 # Test 2X1 vector to calculate the XOR of its elements. 
 # Try (0, 0), (0, 1), (1, 0), (1, 1)
-X_test = np.array([[0],[0],[1], [1]])
+X_test = np.array([[5.4],[3.9],[1.3], [0.4]])
 
 y_predict = predict(X_test, trained_parameters)
 
 print('Neural Network prediction for example ({:d}, {:d}) is {:d}'.format(
     X_test[0][0], X_test[1][0], y_predict))
+
+"""
+prediction=model.predict(X_test)
+length=len(prediction)
+y_label=np.argmax(y_test,axis=1)
+predict_label=np.argmax(prediction,axis=1)
+
+accuracy=np.sum(y_label==predict_label)/length * 100 
+print("Accuracy of the dataset",accuracy )

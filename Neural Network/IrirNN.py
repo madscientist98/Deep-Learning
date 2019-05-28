@@ -16,7 +16,7 @@ iris = iris[iris['species']!=2]
 
 #Create Input and Output columns
 X = iris[['PetalWidthCm', 'PetalLengthCm']].values.T
-Y = iris[['species']].values.T
+Y = iris[['Species']].values.T
 
 
 def initialize_parameters(n_x, n_h, n_y):
